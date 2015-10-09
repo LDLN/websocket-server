@@ -19,14 +19,12 @@
 package chat
 
 import (
-	"crypto/aes"
-	"crypto/cipher"
-	"encoding/base64"
 	"encoding/json"
 	"encoding/hex"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	"log"
+	"github.com/ldln/core/cryptoWrapper"
 )
 
 type Message struct {
@@ -202,7 +200,7 @@ func (msg_obj *Message) parse(c *Client) {
 							log.Println(err)
 						}
 						log.Println(val)
-						kv_plain := decrypt([]byte(dat["dek"].(string)), kv_hex)
+						kv_plain := cryptoWrapper.Decrypt([]byte(dat["dek"].(string)), kv_hex)
 						
 						// unmarshal the json
 						var obj_json map[string]interface{}
@@ -247,7 +245,7 @@ func (msg_obj *Message) parse(c *Client) {
 						log.Println(err)
 					}
 					log.Println(val)
-					kv_plain := decrypt([]byte(dat["dek"].(string)), kv_hex)
+					kv_plain := cryptoWrapper.Decrypt([]byte(dat["dek"].(string)), kv_hex)
 					
 					// unmarshal the json
 					var obj_json map[string]interface{}
@@ -346,27 +344,4 @@ func (msg_obj *Message) parse(c *Client) {
 
 	// send server response message
 	//return string(response_json_map[:])
-}
-
-func decodeBase64(s string) []byte {
-	data, err := base64.StdEncoding.DecodeString(s)
-	if err != nil {
-		panic(err)
-	}
-	return data
-}
-
-func decrypt(key, text []byte) []byte {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		panic(err)
-	}
-	if len(text) < aes.BlockSize {
-		panic("ciphertext too short")
-	}
-	iv := text[:aes.BlockSize]
-	text = text[aes.BlockSize:]
-	cfb := cipher.NewCFBDecrypter(block, iv)
-	cfb.XORKeyStream(text, text)
-	return decodeBase64(string(text))
 }
