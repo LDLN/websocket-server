@@ -208,14 +208,8 @@ func (msg_obj *Message) parse(c *Client) {
 								}
 								log.Println(val)
 								kv_plain := cryptoWrapper.Decrypt([]byte(dat["dek"].(string)), kv_hex)
-								
-								// unmarshal the json
-								var obj_json map[string]interface{}
-								if err := json.Unmarshal(kv_plain, &obj_json); err != nil {
-									panic(err)
-								}
 			
-								syncable_object_map["key_value_pairs"] = obj_json
+								syncable_object_map["key_value_pairs"] = kv_plain
 							}
 		
 							modified_objects = append(modified_objects, syncable_object_map)
@@ -253,12 +247,6 @@ func (msg_obj *Message) parse(c *Client) {
 							}
 							log.Println(val)
 							kv_plain := cryptoWrapper.Decrypt([]byte(dat["dek"].(string)), kv_hex)
-							
-							// unmarshal the json
-							var obj_json map[string]interface{}
-							if err := json.Unmarshal(kv_plain, &obj_json); err != nil {
-								panic(err)
-							}
 		
 							syncable_object_map["key_value_pairs"] = obj_json
 						}
