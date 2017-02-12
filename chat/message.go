@@ -215,7 +215,7 @@ func (msg_obj *Message) parse(c *Client) {
 									panic(err)
 								}
 			
-								syncable_object_map["key_value_pairs_plain"] = obj_json
+								syncable_object_map["key_value_pairs"] = obj_json
 							}
 		
 							modified_objects = append(modified_objects, syncable_object_map)
@@ -260,7 +260,7 @@ func (msg_obj *Message) parse(c *Client) {
 								panic(err)
 							}
 		
-							syncable_object_map["key_value_pairs_plain"] = obj_json
+							syncable_object_map["key_value_pairs"] = obj_json
 						}
 		
 						client_unknown_objects = append(client_unknown_objects, syncable_object_map)
