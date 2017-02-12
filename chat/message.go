@@ -208,7 +208,7 @@ func (msg_obj *Message) parse(c *Client) {
 								log.Println(val)
 								kv_plain := cryptoWrapper.Decrypt([]byte(dat["dek"].(string)), kv_hex)
 			
-								syncable_object_map["key_value_pairs"] = kv_plain.(string)
+								syncable_object_map["key_value_pairs"] = string(kv_plain)
 							}
 		
 							modified_objects = append(modified_objects, syncable_object_map)
@@ -247,7 +247,7 @@ func (msg_obj *Message) parse(c *Client) {
 							log.Println(val)
 							kv_plain := cryptoWrapper.Decrypt([]byte(dat["dek"].(string)), kv_hex)
 		
-							syncable_object_map["key_value_pairs"] = kv_plain.(string)
+							syncable_object_map["key_value_pairs"] = string(kv_plain)
 						}
 		
 						client_unknown_objects = append(client_unknown_objects, syncable_object_map)
