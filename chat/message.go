@@ -19,7 +19,6 @@
 package chat
 
 import (
-	"encoding/json"
 	"encoding/hex"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
@@ -208,14 +207,8 @@ func (msg_obj *Message) parse(c *Client) {
 								}
 								log.Println(val)
 								kv_plain := cryptoWrapper.Decrypt([]byte(dat["dek"].(string)), kv_hex)
-								
-								// unmarshal the json
-								var obj_json map[string]interface{}
-								if err := json.Unmarshal(kv_plain, &obj_json); err != nil {
-									panic(err)
-								}
 			
-								syncable_object_map["key_value_pairs_plain"] = obj_json
+								syncable_object_map["key_value_pairs"] = string(kv_plain)
 							}
 		
 							modified_objects = append(modified_objects, syncable_object_map)
@@ -253,14 +246,8 @@ func (msg_obj *Message) parse(c *Client) {
 							}
 							log.Println(val)
 							kv_plain := cryptoWrapper.Decrypt([]byte(dat["dek"].(string)), kv_hex)
-							
-							// unmarshal the json
-							var obj_json map[string]interface{}
-							if err := json.Unmarshal(kv_plain, &obj_json); err != nil {
-								panic(err)
-							}
 		
-							syncable_object_map["key_value_pairs_plain"] = obj_json
+							syncable_object_map["key_value_pairs"] = string(kv_plain)
 						}
 		
 						client_unknown_objects = append(client_unknown_objects, syncable_object_map)
